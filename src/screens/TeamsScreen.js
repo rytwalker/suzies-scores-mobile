@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { fetchTeams } from '../store/actions/index';
-import Team from '../components/Team';
+import Team from '../components/Team/Team';
 
 class TeamsScreen extends Component {
   componentDidMount() {

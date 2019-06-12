@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { colors } from '../utils';
+import { colors } from '../../utils';
 
 const isRankOdd = rank => rank % 2 !== 0;
 
