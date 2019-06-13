@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import { fetchTeams } from '../store/actions/index';
+import { fetchLeaderboardTeams } from '../store/actions/index';
 import Team from '../components/Team/Team';
 
 class LeaderboardScreen extends Component {
   componentDidMount() {
-    const { fetchTeams, teams } = this.props;
-    if (!teams.length) fetchTeams();
+    const { fetchLeaderboardTeams, teams } = this.props;
+    if (!teams.length) fetchLeaderboardTeams();
   }
   render() {
     const { teams } = this.props;
@@ -29,7 +29,7 @@ class LeaderboardScreen extends Component {
                 />
               );
             }}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item.id}
           />
         )}
       </React.Fragment>
@@ -38,7 +38,7 @@ class LeaderboardScreen extends Component {
 }
 const mapStateToProps = state => {
   return {
-    teams: state.teams.teams,
+    teams: state.teams.leaderboard,
     error: state.teams.error,
     isFetching: state.teams.isFetching
   };
@@ -46,5 +46,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchTeams }
+  { fetchLeaderboardTeams }
 )(LeaderboardScreen);
