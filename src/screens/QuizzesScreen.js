@@ -1,63 +1,36 @@
 import React, { Component } from 'react';
-import { FlatList, ActivityIndicator, View, Text } from 'react-native';
-import { Picker } from 'native-base';
+import { ActivityIndicator, View } from 'react-native';
+
 import { connect } from 'react-redux';
 import { fetchQuiz, fetchQuizzes } from '../store/actions/index';
+import Quiz from '../components/Quiz/Quiz';
+import QuizSelect from '../components/Quiz/QuizSelect';
+import { ScrollView } from 'react-native-gesture-handler';
 
 class QuizzesScreen extends Component {
   componentDidMount() {
     const { fetchQuizzes, quizzes } = this.props;
     if (!quizzes.length) fetchQuizzes();
   }
-  onValueChange = value => {
-    this.setState({
-      selected: value
-    });
+  onValueChange = id => {
+    const { fetchQuiz } = this.props;
+    fetchQuiz(id);
   };
   render() {
     const { quiz, quizzes } = this.props;
     return (
-      <React.Fragment>
+      <ScrollView>
         {!quizzes.length ? (
           <ActivityIndicator />
         ) : (
-          <Picker
-            style={{ width: 120 }}
-            mode="dropdown"
-            selectedValue={'hello'}
-            onValueChange={this.onValueChange}
-            placeholder="pick one"
-          >
-            {quizzes.map(quiz => (
-              <Picker.Item
-                label={quiz.created_at}
-                key={quiz.id}
-                value={quiz.id}
-              />
-            ))}
-          </Picker>
+          <QuizSelect onValueChange={this.onValueChange} quizzes={quizzes} />
         )}
-        {/* {!quiz ? (
-          <ActivityIndicator />
-        ) : (
-          <FlatList
-            data={quiz.scores}
-            renderItem={({ item, index }) => {
-              return (
-                <View>
-                  <Text>{index + 1}</Text>
-                  <Text>{item.team}</Text>
-                  <Text>{item.total_points_scored}</Text>
-                </View>
-              );
-            }}
-            keyExtractor={item => item.score.id}
-          />
-        )} */}
-      </React.Fragment>
+        {quiz && <Quiz quiz={quiz} />}
+      </ScrollView>
     );
   }
 }
+
 const mapStateToProps = state => {
   return {
     error: state.quizzes.error,
