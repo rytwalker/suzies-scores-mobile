@@ -1,50 +1,73 @@
 import React, { Component } from 'react';
-import { FlatList, ActivityIndicator } from 'react-native';
+import { FlatList, ActivityIndicator, View, Text } from 'react-native';
+import { Picker } from 'native-base';
 import { connect } from 'react-redux';
-import { fetchTeams } from '../store/actions/index';
-import Team from '../components/Team/Team';
+import { fetchQuiz, fetchQuizzes } from '../store/actions/index';
 
-class LeaderboardScreen extends Component {
+class QuizzesScreen extends Component {
   componentDidMount() {
-    const { fetchTeams, teams } = this.props;
-    if (!teams.length) fetchTeams();
+    const { fetchQuizzes, quizzes } = this.props;
+    if (!quizzes.length) fetchQuizzes();
   }
+  onValueChange = value => {
+    this.setState({
+      selected: value
+    });
+  };
   render() {
-    const { teams } = this.props;
+    const { quiz, quizzes } = this.props;
     return (
       <React.Fragment>
-        {!teams.length ? (
+        {!quizzes.length ? (
+          <ActivityIndicator />
+        ) : (
+          <Picker
+            style={{ width: 120 }}
+            mode="dropdown"
+            selectedValue={'hello'}
+            onValueChange={this.onValueChange}
+          >
+            {quizzes.map(quiz => (
+              <Picker.Item
+                label={quiz.created_at}
+                key={quiz.id}
+                value={quiz.id}
+              />
+            ))}
+          </Picker>
+        )}
+        {/* {!quiz ? (
           <ActivityIndicator />
         ) : (
           <FlatList
-            data={teams}
+            data={quiz.scores}
             renderItem={({ item, index }) => {
               return (
-                <Team
-                  team={{ ...item, rank: index + 1 }}
-                  index={index}
-                  handleTeamPress={() =>
-                    this.props.navigation.navigate('TeamCard', { item })
-                  }
-                />
+                <View>
+                  <Text>{index + 1}</Text>
+                  <Text>{item.team}</Text>
+                  <Text>{item.total_points_scored}</Text>
+                </View>
               );
             }}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.score.id}
           />
-        )}
+        )} */}
       </React.Fragment>
     );
   }
 }
 const mapStateToProps = state => {
   return {
-    teams: state.teams.teams,
-    error: state.teams.error,
-    isFetching: state.teams.isFetching
+    error: state.quizzes.error,
+    isFetchingQuiz: state.quizzes.isFetchingQuiz,
+    isFetchingQuizzes: state.quizzes.quizzes,
+    quiz: state.quizzes.quiz,
+    quizzes: state.quizzes.quizzes
   };
 };
 
 export default connect(
   mapStateToProps,
-  { fetchTeams }
-)(LeaderboardScreen);
+  { fetchQuiz, fetchQuizzes }
+)(QuizzesScreen);
