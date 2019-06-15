@@ -5,7 +5,7 @@ import {
   FETCHING_QUIZ,
   FETCHING_QUIZ_SUCCESS,
   FETCHING_QUIZ_FAILURE
-} from '../actions';
+} from '../actions/actionTypes';
 
 const initalState = {
   error: null,

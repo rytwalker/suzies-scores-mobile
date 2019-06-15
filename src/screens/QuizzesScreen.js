@@ -26,6 +26,7 @@ class QuizzesScreen extends Component {
             mode="dropdown"
             selectedValue={'hello'}
             onValueChange={this.onValueChange}
+            placeholder="pick one"
           >
             {quizzes.map(quiz => (
               <Picker.Item
