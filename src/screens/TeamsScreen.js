@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { FlatList, ActivityIndicator, Text, View } from 'react-native';
-import { Button, TabHeading } from 'native-base';
+import { Button, Form, Item, Input } from 'native-base';
 import { connect } from 'react-redux';
 import { fetchTeams } from '../store/actions/index';
 import Team from '../components/Team/Team';
+import { colors } from '../utils';
 
 class TeamsScreen extends Component {
   state = {
@@ -24,9 +25,44 @@ class TeamsScreen extends Component {
     const { teams } = this.props;
     return (
       <React.Fragment>
-        <View>
-          <Button onPress={this.handleFetchTeams}>
-            <Text>See all teams</Text>
+        <View style={{ padding: 20 }}>
+          <Form>
+            <Item last>
+              <Input placeholder="Search by teamname" />
+            </Item>
+            <Button
+              style={{
+                backgroundColor: `${colors.blackFaded}`
+              }}
+              block
+              onPress={this.handleFetchTeams}
+            >
+              <Text
+                style={{
+                  color: `${colors.white}`
+                }}
+              >
+                Search
+              </Text>
+            </Button>
+          </Form>
+          <View style={{ margin: 20 }}>
+            <Text style={{ textAlign: 'center' }}>Or</Text>
+          </View>
+          <Button
+            style={{
+              backgroundColor: `${colors.blackFaded}`
+            }}
+            block
+            onPress={this.handleFetchTeams}
+          >
+            <Text
+              style={{
+                color: `${colors.white}`
+              }}
+            >
+              See all teams
+            </Text>
           </Button>
         </View>
         {this.state.showTeams && (
