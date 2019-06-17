@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { FlatList, ActivityIndicator, Text, View } from 'react-native';
-import { Button, Form, Item, Input } from 'native-base';
+import { Button } from 'native-base';
 import { connect } from 'react-redux';
 import { fetchTeams } from '../store/actions/index';
 import Team from '../components/Team/Team';
 import { colors } from '../utils';
 import TeamSearchForm from '../components/Team/TeamSearchForm';
+import TeamList from '../components/Team/TeamList';
 
 class TeamsScreen extends Component {
   state = {
@@ -17,6 +18,8 @@ class TeamsScreen extends Component {
     this.setState({ showTeams: true }, () => fetchTeams());
   };
 
+  handlePress = item => this.props.navigation.navigate('TeamCard', { item });
+
   searchTeams = team => {
     const { fetchTeams } = this.props;
     const queryString = `?search=${team
@@ -24,7 +27,6 @@ class TeamsScreen extends Component {
       .trim()
       .split(' ')
       .join('+')}`;
-    console.log(queryString);
     this.setState({ showTeams: true }, () => fetchTeams(queryString));
   };
 
@@ -55,24 +57,12 @@ class TeamsScreen extends Component {
         </View>
         {this.state.showTeams && (
           <View>
-            {!teams.length ? (
+            {!teams ? (
               <ActivityIndicator />
+            ) : teams.length ? (
+              <TeamList handlePress={this.handlePress} teams={teams} />
             ) : (
-              <FlatList
-                data={teams}
-                renderItem={({ item, index }) => {
-                  return (
-                    <Team
-                      team={{ ...item, rank: index + 1 }}
-                      index={index}
-                      handleTeamPress={() =>
-                        this.props.navigation.navigate('TeamCard', { item })
-                      }
-                    />
-                  );
-                }}
-                keyExtractor={item => item.id.toString()}
-              />
+              <Text>Couldn't find what you were looking for!</Text>
             )}
           </View>
         )}

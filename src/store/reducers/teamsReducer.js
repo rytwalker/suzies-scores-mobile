@@ -8,7 +8,7 @@ import {
 } from '../actions/actionTypes';
 
 const initalState = {
-  teams: [],
+  teams: null,
   leaderboard: [],
   isFetching: false,
   error: null
