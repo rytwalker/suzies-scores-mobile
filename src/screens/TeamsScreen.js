@@ -5,20 +5,27 @@ import { connect } from 'react-redux';
 import { fetchTeams } from '../store/actions/index';
 import Team from '../components/Team/Team';
 import { colors } from '../utils';
+import TeamSearchForm from '../components/Team/TeamSearchForm';
 
 class TeamsScreen extends Component {
   state = {
     showTeams: false
   };
 
-  // componentDidMount() {
-  //   const { teams } = this.props;
-  //   if (!teams.length) fetchTeams();
-  // }
-
   handleFetchTeams = () => {
     const { fetchTeams } = this.props;
     this.setState({ showTeams: true }, () => fetchTeams());
+  };
+
+  searchTeams = team => {
+    const { fetchTeams } = this.props;
+    const queryString = `?search=${team
+      .toLowerCase()
+      .trim()
+      .split(' ')
+      .join('+')}`;
+    console.log(queryString);
+    this.setState({ showTeams: true }, () => fetchTeams(queryString));
   };
 
   render() {
@@ -26,26 +33,7 @@ class TeamsScreen extends Component {
     return (
       <React.Fragment>
         <View style={{ padding: 20 }}>
-          <Form>
-            <Item last>
-              <Input placeholder="Search by teamname" />
-            </Item>
-            <Button
-              style={{
-                backgroundColor: `${colors.blackFaded}`
-              }}
-              block
-              onPress={this.handleFetchTeams}
-            >
-              <Text
-                style={{
-                  color: `${colors.white}`
-                }}
-              >
-                Search
-              </Text>
-            </Button>
-          </Form>
+          <TeamSearchForm searchTeams={this.searchTeams} />
           <View style={{ margin: 20 }}>
             <Text style={{ textAlign: 'center' }}>Or</Text>
           </View>

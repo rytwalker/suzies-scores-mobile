@@ -50,10 +50,16 @@ export const fetchLeaderboardTeams = () => dispatch => {
     });
 };
 
-export const fetchTeams = () => dispatch => {
+export const fetchTeams = (query = null) => dispatch => {
+  let url;
+  if (query) {
+    url = `https://suzies-quiz-scores.herokuapp.com/api/teams/${query}`;
+  } else {
+    url = `https://suzies-quiz-scores.herokuapp.com/api/teams`;
+  }
   dispatch({ type: FETCHING_TEAMS });
   axios
-    .get('https://suzies-quiz-scores.herokuapp.com/api/teams')
+    .get(url)
     .then(res => {
       dispatch({ type: FETCHING_TEAMS_SUCCESS, payload: res.data });
     })
